@@ -1,0 +1,138 @@
+\documentclass[11pt,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{abstract}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=0.7in}
+
+\title{\textbf{Coupled Hydro-Mechanical Retrogressive Slip (CHMRS): A Falsifiable Framework for Water-Pressure-Mediated Catastrophic Glacier Collapse}}
+\author{\textbf{Paul Buchanan}}
+\date{September 5, 2026}
+
+\begin{document}
+
+\twocolumn[
+  \maketitle
+  \begin{onecolabstract}
+    Sudden, catastrophic collapse of temperate mountain glaciers -- as opposed to slow calving or gradual retreat -- is rare, poorly instrumented, and inconsistently predicted by current hazard frameworks. Two independently documented cases, the 2016 Aru Range twin glacier collapses (Tibet) and the 2002 Kolka Glacier catastrophe (Caucasus), share a common mechanism: progressive subglacial pore-water pressurization, acting on an erodible basal substrate, that eventually drives basal effective pressure to zero and triggers a runaway loss of basal shear strength. This paper generalizes that mechanism into the Coupled Hydro-Mechanical Retrogressive Slip (CHMRS) framework and, critically, states it as a set of independently checkable \emph{activation criteria} rather than a narrative fitted after the fact to any single event. We separate the forcing function into a chronic (multi-year pore-pressure trend) component and an acute (short-duration input pulse) component, treating the documented Aru case as the chronic limit and reserving the acute limit for future testing against events with independently gauged rainfall records. We deliberately exclude the August 2026 Langtang Lirung disaster from this paper's evidentiary base; that event is treated in a companion paper as an open test case, and Section~6 states, in advance and without reference to that paper's findings, what CHMRS would require to be judged applicable there.
+    \vspace{0.3cm}
+  \end{onecolabstract}
+]
+
+\section{Introduction}
+Catastrophic, near-instantaneous collapse of a glacier's ablation area -- rather than progressive retreat, calving, or lake-triggered outburst -- has been documented in only a small number of cases worldwide. The best-characterized are the twin 2016 Aru Range glacier collapses in western Tibet, in which the entire ablation areas of two adjacent glaciers (Aru-1 and Aru-2) failed suddenly on 17 July and 21 September 2016 respectively, mobilizing an estimated 68 and 83 million cubic meters of ice and debris and killing nine people \cite{kaab2018,gilbert2018}. The only closely comparable documented event is the 2002 Kolka Glacier catastrophe in the Caucasus, involving roughly 130 million cubic meters \cite{kotlyakov2004}.
+
+Both cases share a mechanistic signature identified through multi-year remote sensing and thermo-mechanical modelling: a \emph{progressive}, multi-year decline in basal friction and corresponding rise in surface velocity, driven by increasing subglacial pore-water pressure fed by surface melt and rainfall infiltration, acting on a soft, fine-grained, erodible substrate \cite{gilbert2018}. This is a slow-building instability with a sudden terminal failure, not a single storm-triggered event.
+
+This paper formalizes that mechanism as CHMRS and states it in a form designed to be falsifiable \emph{before} any specific event is examined: a short list of physical preconditions that must be independently verified, and a precursor-signature table that specifies what should and should not be observable if CHMRS is the operative mechanism. We do not apply this framework to the August 2026 Langtang Lirung disaster in this paper. That event's causal attribution is still contested in the literature at time of writing, and using it to motivate the theory here would reproduce the circularity of an earlier draft of this work, in which the theory's preconditions were inferred from the fact that the event occurred rather than checked independently. Section~6 instead states CHMRS's applicability criteria as a advance prediction, to be evaluated by a companion case-study paper using evidence not used to construct this framework.
+
+\section{Mathematical Framework}
+
+\subsection{Effective Pressure and the Flotation Limit}
+Basal stability is governed by Terzaghi effective pressure:
+\begin{equation}
+N = P_i - P_w
+\end{equation}
+with ice overburden pressure
+\begin{equation}
+P_i = \rho_i g H
+\end{equation}
+where $\rho_i \approx 917$\,kg/m$^3$, $g = 9.81$\,m/s$^2$, and $H$ is local ice thickness. Basal shear strength collapses as $N \to 0$; on an erodible till substrate this is compounded by a shear-strength term $\tau_f$ that itself degrades with pore pressure (Section 2.3), rather than dropping discontinuously at a single threshold as in a rigid-bed model.
+
+\subsection{Subglacial Conduit and Cavity Dynamics}
+Water movement through the subglacial system is governed by the incompressible Navier-Stokes equations:
+\begin{equation}
+\rho_w \left( \frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla)\vec{u} \right) = -\nabla P_w + \mu \nabla^2 \vec{u} + \rho_w \vec{g}
+\end{equation}
+Critically, the subglacial drainage system's \emph{configuration} determines how an input pulse translates into pressure. A channelized (Röthlisberger-type) system evacuates water efficiently and resists pressurization; a distributed, linked-cavity system (Kamb-type) is far more prone to transient over-pressurization under the same input \cite{kamb1987}. CHMRS therefore requires, as a precondition, that the subglacial system be in or transitioning toward a distributed configuration -- a checkable state, not an assumption.
+
+\subsection{Generalized Forcing Function}
+We replace the single acute shock-pulse forcing of earlier drafts of this work with a two-component forcing function:
+\begin{equation}
+P_w(t) = P_{w,0} + \underbrace{\int_0^t k \, M(t')\,dt'}_{\text{chronic term}} + \underbrace{\rho_w g h(t)}_{\text{acute term}}
+\end{equation}
+where $M(t')$ is the time series of surface melt plus rainfall input to the glacier interior (via crevasses or moulins), $k$ is an infiltration-to-pressure coupling coefficient set by drainage-system configuration, and $h(t)$ is any transient hydrostatic head from a short-duration input pulse such as the bounded step function used in the original draft:
+\begin{equation}
+I_{\text{rain}}(t) = I_0 \cdot \left[ \mathcal{H}(t - t_0) - \mathcal{H}(t - t_0 - \Delta t) \right]
+\end{equation}
+The documented Aru collapses correspond to the chronic term dominating over 5--6 years, with the acute term negligible at the moment of failure \cite{gilbert2018}. A hypothetical acute-dominant case -- a single large storm collapsing a glacier already near its chronic threshold -- remains a live, testable variant of CHMRS, but is not yet supported by a documented case and should not be presented as established.
+
+\section{Activation Criteria}
+For CHMRS to be a viable candidate explanation of a given collapse, the following preconditions must be independently checkable \emph{before} the outcome is used as evidence. Absence of any one of C1--C4 is sufficient to reject CHMRS as the operative mechanism for that event, regardless of whether a catastrophic collapse occurred.
+
+\begin{table}[h]
+\centering
+\caption{CHMRS Activation Criteria}
+\small
+\begin{tabular}{p{0.15\linewidth}p{0.32\linewidth}p{0.35\linewidth}}
+\toprule
+\textbf{ID} & \textbf{Criterion} & \textbf{Independent evidence required} \\
+\midrule
+C1 & Temperate or polythermal bed (at pressure-melting point) & Borehole thermometry, or modelled thermal regime from geometry/climate \cite{gilbert2018} \\
+C2 & Soft, erodible, fine-grained basal substrate (till/sediment), not competent bedrock & Geological mapping, lithology of surrounding exposed rock \cite{gilbert2018,kotlyakov2004} \\
+C3 & Progressive, multi-year (not multi-week) decline in basal friction / rise in surface velocity & Multi-year InSAR or optical feature-tracking velocity time series \\
+C4 & Surface-to-bed hydraulic connectivity (crevasse or moulin network) & Satellite imagery of crevasse fields upstream of the failure zone \\
+C5 (acute variant only) & A rain/melt pulse capable of exceeding contemporaneous drainage capacity & Independently gauged precipitation and discharge records \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Precursor Signatures}
+Table 2 separates observations that are consistent with CHMRS from those that actively argue against it. This is the section most earlier drafts omitted: a theory that only lists confirming signatures is not falsifiable.
+
+\begin{table}[h]
+\centering
+\caption{CHMRS-Consistent vs. CHMRS-Inconsistent Precursors}
+\small
+\begin{tabular}{p{0.42\linewidth}p{0.42\linewidth}}
+\toprule
+\textbf{Consistent with CHMRS} & \textbf{Inconsistent with / argues against CHMRS} \\
+\midrule
+Multi-year progressive velocity increase localized to a wet-based zone & Velocity increase confined to days-to-weeks with no longer trend \\
+Soft sedimentary/till substrate confirmed geologically & Competent, jointed bedrock (e.g., metamorphic gneiss) at the failure surface \\
+Documented rainfall/melt input record coincident with the pressure-rise period & No meteorological forcing recorded in the relevant window \\
+Seismic signal consistent with fluid-resonance or cavity collapse & Seismic signal shown to be generated \emph{by} the mass failure itself, with no precursor signal from the water system \\
+Compressing pulse-frequency in proglacial discharge & No proglacial discharge record, or a stable/unremarkable discharge pattern immediately prior \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Falsification Protocol}
+Any application of CHMRS to a specific event must proceed in this order:
+\begin{enumerate}
+\item Establish C1--C4 (and C5, if the acute variant is being tested) from evidence gathered independently of the collapse's occurrence.
+\item Only after C1--C4 are independently satisfied, assess whether the forcing function (Eq. 4) plausibly reaches $N \le 0$ within the observed timeframe.
+\item If any precondition is unmet or unverifiable, CHMRS must be reported as \emph{not applicable} or \emph{indeterminate} for that event -- not as weakly supported, and not rescued by appeal to the outcome itself.
+\end{enumerate}
+This ordering is the direct fix for a circularity identified in an earlier draft of this work, in which the preconditions were inferred backward from the known outcome rather than checked against independent data.
+
+\section{Advance Prediction: Applicability to Langtang Lirung (2026)}
+Without drawing on this paper's companion case-study analysis, we state here what CHMRS predicts based only on information already in the public record at time of writing:
+\begin{itemize}
+\item C2 is doubtful: reported bedrock at the Langtang Lirung failure site is described as jointed, multi-tiered metamorphic gneiss, not soft erodible till.
+\item C3 is doubtful on the documented timescale: reported satellite velocity data show an accelerating trend over weeks, not the multi-year progression documented at Aru.
+\item C5 fails outright: no rainfall was reported in the vicinity on the day of collapse.
+\end{itemize}
+On this basis, CHMRS \emph{predicts itself inapplicable} to Langtang Lirung as an acute or chronic hydro-mechanical trigger, and predicts that a bedrock/permafrost failure mechanism, independent of subglacial water pressure, is the better-supported explanation for that event. This prediction is stated here, in advance, specifically so that the companion case-study paper can check it against evidence without either paper contaminating the other.
+
+\section{Conclusion}
+CHMRS, restated with explicit activation criteria and a falsification protocol, remains a credible mechanism for a documented but rare class of catastrophic glacier collapse -- one grounded in the independently verified Aru and Kolka cases rather than in the event that originally motivated this line of research. Whether it applies more broadly, including to future acute rainfall-triggered cases, is now a testable empirical question rather than an assumption embedded in the theory's construction.
+
+\begin{thebibliography}{99}
+\bibitem{flowers2002} Flowers, G. E., \& Clarke, G. K. C. (2002). A distributed model of subglacial hydrology, coupled to ice flow. \textit{Journal of Geophysical Research: Solid Earth}, 107(B8).
+\bibitem{iken1986} Iken, A., \& Bindschadler, R. A. (1986). Combined measurements of subglacial water pressure and surface velocity of Findelengletscher. \textit{Journal of Glaciology}, 32(110).
+\bibitem{kaab2018} K\"a\"ab, A., Leinss, S., Gilbert, A., et al. (2018). Massive collapse of two glaciers in western Tibet in 2016 after surge-like instability. \textit{Nature Geoscience}, 11(2), 114--120.
+\bibitem{gilbert2018} Gilbert, A., Leinss, S., K\"a\"ab, A., et al. (2018). Mechanisms leading to the 2016 giant twin glacier collapses, Aru Range, Tibet. \textit{The Cryosphere}, 12, 2883--2900.
+\bibitem{kamb1987} Kamb, B. (1987). Glacier surge mechanism based on linked cavity configuration of the basal water conduit system. \textit{Journal of Geophysical Research: Solid Earth}, 92(B9), 9083--9100.
+\bibitem{kotlyakov2004} Kotlyakov, V. M., Rototaeva, O. V., \& Nosenko, G. A. (2004). The September 2002 Kolka Glacier catastrophe in North Ossetia, Russian Federation: Evidence and analysis. \textit{Mountain Research and Development}, 24(1), 78--83.
+\end{thebibliography}
+
+\end{document}

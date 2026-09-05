@@ -1,0 +1,90 @@
+\documentclass[11pt,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{abstract}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=0.7in}
+
+\title{\textbf{Langtang Lirung, August 2026: An Evidence-First Test of the CHMRS Activation Criteria}}
+\author{\textbf{Paul Buchanan}}
+\date{September 5, 2026}
+
+\begin{document}
+
+\twocolumn[
+  \maketitle
+  \begin{onecolabstract}
+    On 26 August 2026 at 08:37 local time, a mass of bedrock carrying a hanging glacier detached from the north face of Langtang Lirung and fell approximately 1,200 metres, triggering a debris flow that killed over a thousand people and left thousands missing along the Nepal-China border. A companion paper formalized the Coupled Hydro-Mechanical Retrogressive Slip (CHMRS) framework independently of this event and stated, in advance, five checkable activation criteria (C1--C5) together with a prediction that the framework would likely prove inapplicable here. This paper assembles the independently reported facts of the collapse -- geological, seismic, meteorological, and remote-sensing -- before testing them against those criteria. Three of five criteria fail outright on current evidence, one is indeterminate, and one is only partially satisfied on a timescale inconsistent with the framework's documented precedent. We conclude that CHMRS's own advance prediction holds: the mechanism does not map onto this event. The better-supported explanation is a jointed, ice-and-permafrost-cemented rock mass failure -- mechanically distinct from subglacial water-pressure flotation. We treat this as a successful test of the framework's falsifiability, not as a failure of the underlying theory, which remains applicable to the documented class of events it was built from.
+    \vspace{0.3cm}
+  \end{onecolabstract}
+]
+
+\section{Purpose and Method}
+This paper deliberately reverses the order of an earlier draft of this line of research, in which a mechanism was constructed to explain this event and then supported by evidence selected for consistency with it. Here, the mechanism (CHMRS) and its activation criteria were fixed first, in a companion paper, without reference to this event's specific evidence. This paper's only task is to assemble what is independently known about the 26 August 2026 Langtang Lirung collapse and check it against those pre-stated criteria (C1--C5). Where evidence is contested or incomplete, this is stated as such rather than resolved in the direction that favors either paper.
+
+A caveat applies throughout: this event occurred days before writing, and the sourcing below is drawn from official agency statements (USGS, GFZ), scientist statements reported in \textit{Nature}'s news coverage, and rapid post-event geoscience assessment, rather than from peer-reviewed literature, which does not yet exist for this event. Figures for casualties and debris volume are explicitly noted as provisional and still moving at time of writing.
+
+\section{Independently Verified Chronology}
+\begin{itemize}
+\item \textbf{8 January -- 18 August 2026:} Sentinel-1 satellite radar interferometry recorded the glacier-rock mass near the eventual failure zone moving at roughly 10\,mm/month, with the rate accelerating in the weeks immediately preceding collapse \cite{nature2026sat}.
+\item \textbf{Since 2003:} Independent long-term glacier monitoring in the Langtang catchment found the Lirung, Langshisha, and Ghanna glaciers effectively stagnant, advancing under 10\,m/year -- a debris-covered, largely inactive tongue rather than an actively sliding glacier \cite{geoscopy2026}.
+\item \textbf{Morning of 26 August 2026:} No rainfall was reported at the nearest district headquarters, and no extreme weather preceded the event \cite{antarcticglaciers2026,wiki2026floods}.
+\item \textbf{08:37 NPT (02:52 UTC), 26 August 2026:} A mass of bedrock carrying a hanging glacier detached from the north face of the Lirung massif at approximately 5,200\,m elevation and fell roughly 1,200\,m into the head of the Lhende Khola \cite{unda2026}.
+\item \textbf{Seismic record:} USGS measured the event at Ms 5.2; GFZ Potsdam measured Mw 5.7 at an identical timestamp. Both agencies determined the long-period seismic waveform was generated \emph{by} the mass failure itself, not by a preceding tectonic earthquake -- ruling out an earthquake trigger \cite{wiki2026floods}.
+\item \textbf{Subsequent hours:} The resulting debris flow, moving at speeds reported up to 190\,km/h, reached the Nepal-China border roughly 22\,km downstream within minutes and continued approximately 100\,km down the Trishuli/Bhote Koshi system \cite{unda2026,conversation2026}.
+\item \textbf{Post-event imagery:} Satellite and drone imagery show bedrock failed together with the overlying ice; the precise sequence (rock-first vs. ice-first) remains unresolved in current reporting \cite{phys2026,pttl2026}.
+\item \textbf{Geology:} USGS characterizes the local bedrock as high-grade metamorphic rock -- gneiss, quartzite, and marble \cite{geoscopy2026}.
+\item \textbf{Hydrology:} No evidence of a Glacial Lake Outburst Flood (GLOF) has been found; this is explicitly ruled out by multiple independent assessments \cite{antarcticglaciers2026,unda2026}.
+\end{itemize}
+
+\section{Criteria-by-Criteria Test}
+
+\begin{table}[h]
+\centering
+\caption{CHMRS Activation Criteria Tested Against Evidence}
+\small
+\begin{tabular}{p{0.06\linewidth}p{0.4\linewidth}p{0.42\linewidth}}
+\toprule
+\textbf{ID} & \textbf{Verdict} & \textbf{Basis} \\
+\midrule
+C1 & \textbf{Indeterminate} & No borehole or in-situ thermal data exists for this slope; thermal regime cannot be independently confirmed either way. \\
+C2 & \textbf{Fails} & USGS geologic mapping identifies competent high-grade metamorphic bedrock (gneiss/quartzite/marble), not the soft erodible till documented at Aru and Kolka. \\
+C3 & \textbf{Fails as stated} & The relevant precursor window is weeks, following decades of near-stagnant (\textless10\,m/yr) glacier behavior since 2003 -- not the multi-year progressive decline in basal friction documented at Aru. \\
+C4 & \textbf{Indeterminate} & No independently reported crevasse-field mapping upstream of the failure zone at time of writing. \\
+C5 & \textbf{Fails} & No rainfall was reported in the vicinity on the day of, or in the days preceding, the collapse. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two of the five criteria (C2, C5) fail on evidence that does not depend on interpretation -- geologic maps and meteorological station records are not ambiguous on these points. C3 fails specifically on the timescale the documented precedent requires, though a much shorter-duration variant of pore-pressure buildup cannot be entirely excluded without subglacial instrumentation that does not exist. C1 and C4 are genuinely indeterminate given current data, not favorable to either side.
+
+\section{The Better-Supported Alternative}
+Current reporting converges, with residual uncertainty about exact sequencing, on a mechanically distinct explanation: a jointed rock mass, held in place by ice and permafrost acting as a structural cement within its fracture network, lost that cementation as warming degraded the ice/permafrost binding, and failed as a combined rock-ice mass rather than as a glacier detaching from a pressurized hydraulic bed \cite{geoscopy2026,pielke2026}. This is consistent with the broader documented pattern of rising rock-ice avalanche risk from permafrost degradation in High Mountain Asia \cite{conversation2026}, but it is a thermal-mechanical failure of the rock-ice bond, not a hydro-mechanical flotation event. Genuine scientific disagreement remains over how much weight to give long-term warming versus site-specific geological instability in this particular case \cite{pielke2026}; that disagreement does not bear on the CHMRS test above, since neither side of it proposes a subglacial water-pressure trigger.
+
+\section{Discussion: What This Test Demonstrates}
+The value of this exercise is not that CHMRS was "wrong" -- it was never claimed to explain all glacier-related mass failures, and it remains well-supported for the class of events (Aru, Kolka) it was built from. The value is structural: because Paper 1 stated falsifiable criteria \emph{before} this paper examined the evidence, this paper's negative result is a genuine test rather than a foregone conclusion. Had C2 and C5 come back satisfied instead of failed, that would have been a real point in CHMRS's favor, obtained the same way. The multi-input, multi-timescale nature of the underlying physics -- chronic versus acute forcing, thermal versus hydro-mechanical pathways, weeks versus years of precursor signal -- means CHMRS was always better treated as a scoped theory with checkable boundaries than as a single confirmable-or-refutable claim, and that scoping is what allowed this test to return a clean, informative answer rather than another retrofit.
+
+\section{Conclusion}
+On presently available evidence, CHMRS is not the operative mechanism for the 26 August 2026 Langtang Lirung collapse. This is precisely what the framework predicted about itself in advance. The event is better explained by ice/permafrost-cemented jointed rock-mass failure, a mechanism CHMRS was never designed to cover. This outcome should be read as evidence that the two-paper structure -- theory fixed first, case tested second, independently -- functioned as intended, and as a caution against extending CHMRS to future events without repeating the same criteria-first discipline.
+
+\begin{thebibliography}{99}
+\bibitem{nature2026sat} Satellite images before Nepal disaster showed warning signs. \textit{Nature} (2026, news article). \url{https://www.nature.com/articles/d41586-026-02746-4}
+\bibitem{geoscopy2026} How a Collapsing Glacier Drowned the Bhote Koshi Valley. Geoscopy (2026). \url{https://geoscopy.com/how-a-collapsing-glacier-drowned-the-bhote-koshi-valley/}
+\bibitem{antarcticglaciers2026} August 2026 Nepal-Tibet floods. AntarcticGlaciers.org (2026). \url{https://www.antarcticglaciers.org/2026/08/august-2026-nepal-tibet-floods/}
+\bibitem{wiki2026floods} 2026 Nepal--Tibet floods. Wikipedia (accessed September 2026). \url{https://en.wikipedia.org/wiki/2026_Nepal_floods}
+\bibitem{unda2026} Glacier Collapse, Not a Glacial Lake Outburst Flood: What Happened in Nepal. UNDA (2026). \url{https://www.unda.co.uk/news/glacial-lake-outburst-flood-nepal-2026/}
+\bibitem{conversation2026} The collapse of a mountainside triggered Nepal's devastating floods. \textit{The Conversation} (2026). \url{https://theconversation.com/the-collapse-of-a-mountainside-triggered-nepals-devastating-floods-as-the-regions-mountains-heat-up-it-wont-be-the-last-290924}
+\bibitem{phys2026} Satellite images show bedrock and glacier collapsed on Nepal-China border, then rivers flooded. Phys.org (2026). \url{https://phys.org/news/2026-08-satellite-images-bedrock-glacier-collapsed.html}
+\bibitem{pttl2026} Drone Captured the Langtang Lirung Collapse as It Unfolded in Nepal (2026). \url{https://www.pttl.gr/en/nepal-avalanche-drone-langtang-lirung/}
+\bibitem{pielke2026} Commentary disputing sole climate-change attribution and emphasizing geological instability as a contributing factor (2026); cited here to note unresolved attribution debate, not as a source for the CHMRS test itself.
+\end{thebibliography}
+
+\end{document}
