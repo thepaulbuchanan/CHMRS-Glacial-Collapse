@@ -34,7 +34,7 @@ The research is organized as a unified, three-part academic series supported by 
 * **Title:** *Langtang Lirung, August 2026: An Evidence-First Test of the CHMRS Activation Criteria*
 * **Core Contribution:** Executes an objective field-data test of the CHMRS criteria against the 26 August 2026 Langtang Lirung disaster. Because the failure plane consisted of high-grade metamorphic gneiss rather than erodible till (C2 fails), and zero rainfall occurred near the window (C5 fails), the paper demonstrates a **successful falsification**. It establishes that the event was a mechanically distinct thermal-mechanical permafrost-cemented rock-mass failure, vindicating the framework's mathematical boundaries.
 
-### 💻 [Paper 3 / Code] Numerical Simulation Engine (`chmrs_simulation.py`)
+### 💻 [Paper 2 / Code] Numerical Simulation Engine (`chmrs_simulation.py`)
 * **Core Contribution:** An operational Python verification model that solves the 1D Navier-Stokes boundary equations under an episodic Heaviside shock loading function (e.g., a 50mm/2hr cloudburst) to dynamically map the **Time-to-Failure (TTF)** curve as $N \to 0$.
 
 ---
