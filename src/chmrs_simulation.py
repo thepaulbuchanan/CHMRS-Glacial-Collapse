@@ -64,14 +64,18 @@ N_min_history = []
 u_exit_history = []
 
 # =====================================================================
-# 4. NAVIER-STOKES SOLVER LOOP WITH STOCHASTIC GEOMETRIC NOISE
+# 4. NAVIER-STOKES SOLVER WITH GEOMETRIC NOISE & STOCHASTIC LÉVY JUMPS
 # =====================================================================
 ttf_seconds = None
 flotation_triggered = False
 
 # Configuration parameters for stochastic boundary layer
-SIGMA_GEOM = 0.08 * P_I  # Geometric noise intensity scaled to 8% of ice weight
+SIGMA_GEOM = 0.08 * P_I  # Geometric noise intensity (8% of ice weight)
 np.random.seed(42)       # Fix seed for strict reproducibility
+
+# --- NEW: STOCHASTIC LÉVY JUMP ARCHITECTURE PARAMETERS ---
+LAMBDA_JUMP = 0.005      # Probability of a structural choke/jump occurring per step (0.5% chance)
+GAMMA_JUMP = 0.15 * P_I  # Scale amplitude of a structural pressure shock wave jump
 
 prob_flotation_triggered = False
 ttf_prob_seconds = None
@@ -79,7 +83,7 @@ ttf_prob_seconds = None
 # Allocate the grid array space cleanly across the 100 spatial nodes
 P_w = np.linspace(P_w_chronic, P_w_chronic * 0.4, NX)
 
-print(">> Initiating Coupled Stochastic Boundary Run...")
+print(">> Initiating Coupled Stochastic Lévy Jump Boundary Run...")
 
 for step in range(NT):
     current_time = step * DT
@@ -90,52 +94,52 @@ for step in range(NT):
     u_old = u.copy()
     
     # Explicit boundary conditions to upstream/downstream terminal nodes
-    P_w[0] = RHO_WATER * G * h_pulse + P_w_chronic  # Inlet injection node 0
+    # Inside src/chmrs_simulation.py -> Line 91 (Fix the variable overwrite)
+    P_w[0] = RHO_WATER * G * h_pulse + P_w_chronic  # Target index node 0 exclusively
+
     P_w[-1] = P_w_chronic * 0.4                     # Outlet venting node NX-1
     
     # --- DETERMINISTIC NAVIER-STOKES SOLVER STEP ---
     for i in range(1, NX - 1):
-        # 1D pressure gradient force
         pressure_gradient = (P_w_old[i+1] - P_w_old[i-1]) / (2.0 * DX)
         
-        # Stable 1D Upwind Advection Scheme
         if u_old[i] > 0:
             advection = u_old[i] * (u_old[i] - u_old[i-1]) / DX
         else:
             advection = u_old[i] * (u_old[i+1] - u_old[i]) / DX
             
-        # Viscous diffusion shear losses
         viscous_diffusion = MU * (u_old[i+1] - 2.0*u_old[i] + u_old[i-1]) / (DX**2)
-        
-        # Down-slope gravitational driving force vector
         gravity_force = G * np.sin(np.radians(SLOPE_ANGLE))
         
-        # Update Velocity vector field
         u[i] = u_old[i] + DT * (-(1.0 / RHO_WATER) * pressure_gradient - advection + viscous_diffusion + gravity_force)
-        
-        # Mass conservation pressure coupling wave update
         P_w[i] = P_w_old[i] - DT * (RHO_WATER * G) * (u[i] - u[i-1]) / DX
 
-    # --- PROBABILISTIC / GEOMETRIC NOISE STEP ---
-    # Inject Stochastic Geometric Noise Vector across spatial cells
-    # Represents unobservable bed roughness and internal conduit scaling anomalies
+    # --- PROBABILISTIC GEOMETRIC NOISE & STOCHASTIC LÉVY JUMP LAYER ---
+    # 1. Continuous Gaussian noise field
     geometric_noise = np.random.normal(0, SIGMA_GEOM, size=NX)
     
-    # Compute the decoupled probabilistic pressure field
-    P_w_prob = P_w + geometric_noise
+    # 2. Compound Poisson Jump Process (Lévy Jump Matrix)
+    # Checks if a sudden subglacial structural choking event triggers at this millisecond step
+    levy_jump = np.zeros(NX)
+    if np.random.rand() < LAMBDA_JUMP:
+        # A roof collapse occurs! Generate a massive, positive pressure spike spike along the bed
+        jump_location = np.random.randint(1, NX - 1)
+        levy_jump[jump_location] = np.random.normal(GAMMA_JUMP, 0.05 * GAMMA_JUMP)
+        print(f"   [LÉVY SHOCK] Subglacial conduit collapse modeled at cell node {jump_location} at t = {current_time/60.0:.2f} mins.")
+    
+    # Compute the decoupled probabilistic pressure field containing discontinuous shocks
+    P_w_prob = P_w + geometric_noise + levy_jump
     
     # Compute Terzaghi Effective Pressure profiles: N = Pi - Pw
     N_deterministic = P_I - P_w
     N_probabilistic = P_I - P_w_prob
     
-    # Monitor the minimum effective pressure along the internal sliding mass
     min_N_det_body = np.min(N_deterministic[1:-1])
     min_N_prob_body = np.min(N_probabilistic[1:-1])
     
     # Telemetry logging (sampled every 20 steps to save memory arrays)
     if step % 20 == 0:
         time_history.append(current_time / 60.0)
-        # Log the deterministic curve to maintain consistency with your Paper 3 plot setup
         N_min_history.append(min_N_det_body / 1e6)
         u_exit_history.append(u[-2])
     
@@ -154,7 +158,7 @@ for step in range(NT):
     # AUTOMATED EARLY EXIT: Once both boundaries are triggered, compute the delta and break
     if flotation_triggered and prob_flotation_triggered:
         delta_lead_time = (ttf_seconds - ttf_prob_seconds) / 60.0
-        print(f">> SUCCESS: Stochastic noise-induced delta identifies localized failure {delta_lead_time:.2f} minutes early.")
+        print(f">> SUCCESS: Stochastic Lévy-diffusion delta identifies localized failure {delta_lead_time:.2f} minutes early.")
         break
 
 # =====================================================================
