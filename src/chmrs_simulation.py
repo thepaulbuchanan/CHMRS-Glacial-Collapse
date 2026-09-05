@@ -12,6 +12,8 @@ flotation threshold (N <= 0).
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.fft import fft, fftfreq  # ADD THIS LINE FOR SPECTRAL MATH
+
 
 # =====================================================================
 # 1. PHYSICAL CONSTANTS & CONTEXT PRESETS
@@ -156,28 +158,60 @@ for step in range(NT):
         break
 
 # =====================================================================
-# 5. POST-PROCESSING DATA VISUALIZATION
+# 5. POST-PROCESSING DATA VISUALIZATION & SPECTRAL FFT MODULE
 # =====================================================================
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+# Convert telemetry to clean numpy arrays
+t_arr = np.array(time_history)        # Time in minutes
+N_arr = np.array(N_min_history)       # Effective Pressure in MPa
+u_arr = np.array(u_exit_history)      # Venting velocity in m/s
+
+# Calculate the actual sampling rate for the FFT computation
+# Sampling interval in seconds: 20 steps * DT (0.05s) = 1.0 second
+dt_sample = 20 * DT  
+N_samples = len(u_arr)
+
+# Execute the Fast Fourier Transform over the velocity profile
+u_detrended = u_arr - np.mean(u_arr)  # Strip DC offset to cleanly see frequencies
+fft_values = fft(u_detrended)
+frequencies = fftfreq(N_samples, d=dt_sample)
+
+# Calculate Power Spectral Density (PSD) - positive frequencies only
+positive_mask = frequencies > 0
+freq_spectrum = frequencies[positive_mask]
+psd_spectrum = np.abs(fft_values[positive_mask])**2
+
+# --- COMPILE PEER-REVIEW GRID VISUALIZATION ---
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 11))
 
 # Graph 1: Basal Effective Pressure Degradation Path
-ax1.plot(time_history, N_min_history, color='crimson', lw=2.5, label='Minimum Body Effective Pressure ($N$)')
-ax1.axhline(0, color='black', linestyle='--', lw=1.2, label='Flotation Parity ($N=0$)')
-if flotation_triggered:
-    ax1.axvline(ttf_seconds/60.0, color='darkorange', linestyle=':', lw=2, 
-                label=f'Time-to-Failure (TTF): {ttf_seconds/60.0:.1f} mins')
-ax1.set_ylabel('Effective Pressure $N$ (MPa)', fontsize=12)
-ax1.set_title('CHMRS Simulation: Structural Overburden vs Basal Pressure Wave', fontsize=14, fontweight='bold')
+ax1.plot(t_arr, N_arr, color='crimson', lw=2.5, label='Min Body Effective Pressure ($N$)')
+ax1.axhline(0, color='black', linestyle='--', lw=1.2, label='Flotation Threshold ($N=0$)')
+if ttf_prob_seconds is not None:
+    ax1.axvline(ttf_prob_seconds/60.0, color='forestgreen', linestyle=':', lw=2,
+                label=f'Stochastic Alarm: {ttf_prob_seconds/60.0:.2f} mins')
+if ttf_seconds is not None:
+    ax1.axvline(ttf_seconds/60.0, color='darkorange', linestyle=':', lw=2,
+                label=f'Wholesale Failure: {ttf_seconds/60.0:.2f} mins')
+ax1.set_ylabel('Effective Pressure $N$ (MPa)', fontsize=11)
+ax1.set_title('CHMRS Solver: Coupled Stochastic Boundary Layer & Spectral Output', fontsize=13, fontweight='bold')
 ax1.grid(True, linestyle=':', alpha=0.6)
 ax1.legend(loc='upper right')
 
 # Graph 2: Forward-Axis Conduit Venting Velocity Pulse
-ax2.plot(time_history, u_exit_history, color='dodgerblue', lw=2.5, label='Terminal Venting Velocity ($u$)')
-ax2.set_xlabel('Time Post-Shock Injection (Minutes)', fontsize=12)
-ax2.set_ylabel('Fluid Outflow Velocity $u$ (m/s)', fontsize=12)
+ax2.plot(t_arr, u_arr, color='dodgerblue', lw=2.5, label='Terminal Venting Velocity ($u$)')
+ax2.set_ylabel('Fluid Outflow $u$ (m/s)', fontsize=11)
 ax2.grid(True, linestyle=':', alpha=0.6)
 ax2.legend(loc='upper left')
 
+# Graph 3: Fast Fourier Transform Power Spectral Density (The Spectral Blueprint)
+ax3.plot(freq_spectrum, psd_spectrum, color='purple', lw=2.5, label='Velocity Power Spectrum (PSD)')
+ax3.set_xlabel('Frequency (Hz)', fontsize=11)
+ax3.set_ylabel('Power Density $(m/s)^2/Hz$', fontsize=11)
+ax3.set_title('Spectral Signature: Critical Slowing Down Dominance Pattern', fontsize=11, fontweight='bold')
+ax3.set_yscale('log')  # Log scale reveals the low-frequency resonance spike cleanly
+ax3.grid(True, linestyle=':', alpha=0.6)
+ax3.legend(loc='upper right')
+
 plt.tight_layout()
 plt.savefig('chmrs_simulation_output.png', dpi=300)
-print(">> Metrics plotted successfully. Output exported to: chmrs_simulation_output.png")
+print(">> Spectral analytics plotted successfully. Exported to: chmrs_simulation_output.png")
