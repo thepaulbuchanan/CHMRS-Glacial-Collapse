@@ -55,7 +55,7 @@ $$N \le 0 \iff P_w \ge P_i$$
 
 ---
 
-## 🚀 Execution & Quick Start (Paper 3 Solver)
+## 🚀 Execution & Quick Start (Paper 2 Solver)
 
 ### Prerequisites
 The numerical script requires a standard Python environment with `numpy` and `matplotlib` installed.
