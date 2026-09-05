@@ -1,0 +1,23 @@
+# Python bytecode and environment artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+.pytest_cache/
+
+# LaTeX auxiliary compilation output overrides
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.blg
+*.bbl
+*.pdf
+*.png
+
+# Operating system noise
+.DS_Store
+Thumbs.db
