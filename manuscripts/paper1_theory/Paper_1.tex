@@ -47,6 +47,20 @@ P_i = \rho_i g H
 \end{equation}
 where $\rho_i \approx 917$\,kg/m$^3$, $g = 9.81$\,m/s$^2$, and $H$ is local ice thickness. Basal shear strength collapses as $N \to 0$; on an erodible till substrate this is compounded by a shear-strength term $\tau_f$ that itself degrades with pore pressure (Section 2.3), rather than dropping discontinuously at a single threshold as in a rigid-bed model.
 
+\subsection{Stochastic Boundary Layer and Geometric Noise}
+To account for unobservable subglacial bed roughness and localized conduit structural configuration shifts, we transition the deterministic Terzaghi effective pressure framework to a Stochastic Partial Differential Equation (SPDE) model:
+\begin{equation}
+N_{\text{prob}}(x, t) = P_i - \left[ P_w(x, t) + \sigma_{\text{geom}} \cdot dW_t \right]
+\end{equation}
+where $dW_t$ is a spatio-temporal Brownian noise vector, and $\sigma_{\text{geom}}$ is the noise intensity parameter, set via computational sensitivity analysis to $0.08 \, P_i$. Because of stochastic fluctuations, localized bed segments cross the flotation threshold ($N \le 0$) significantly earlier than the deterministic spatial mean, creating a distinct, noise-induced predictive lead-time advantage ($\Delta t$).
+\subsection{Stochastic Jump-Diffusion Framework for Structural Conduit Collapse}
+To simulate discontinuous geomechanical shocks -- such as localized subglacial ice-ceiling cave-ins or shifting morainic debris blockages -- we expand the subglacial hydraulic boundary condition into a non-Gaussian jump-diffusion process. The probabilistic basal water pressure field $P_{w,\text{prob}}$ is governed by:
+\begin{equation}
+P_{w,\text{prob}}(x, t) = P_w(x, t) + \sigma_{\text{geom}} \cdot dW_t + \sum_{k=1}^{N_t} \gamma_{\text{jump}, k}
+\end{equation}
+where $dW_t$ represents the continuous Gaussian geometric noise envelope, $N_t$ is a homogeneous Poisson process with an intensity parameter $\lambda_{\text{jump}} = 0.005$, and $\gamma_{\text{jump}, k}$ is a normally distributed random variable scaling the amplitude of the structural pressure spike ($\mu_{\text{jump}} = 0.15 \, P_i$). This combined stochastic formulation establishes that discontinuous structural failures distort the time-to-failure (TTF) curve, inducing early localized flotation ahead of the deterministic spatial mean.
+
+
 \subsection{Subglacial Conduit and Cavity Dynamics}
 Water movement through the subglacial system is governed by the incompressible Navier-Stokes equations:
 \begin{equation}
