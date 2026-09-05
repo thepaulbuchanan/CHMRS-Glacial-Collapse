@@ -62,12 +62,22 @@ N_min_history = []
 u_exit_history = []
 
 # =====================================================================
-# 4. NAVIER-STOKES FINITE-DIFFERENCE SOLVER LOOP
+# 4. NAVIER-STOKES SOLVER LOOP WITH STOCHASTIC GEOMETRIC NOISE
 # =====================================================================
 ttf_seconds = None
 flotation_triggered = False
 
-print(">> Initiating CHMRS Fluid-Structure Interaction Run...")
+# Configuration parameters for stochastic boundary layer
+SIGMA_GEOM = 0.08 * P_I  # Geometric noise intensity scaled to 8% of ice weight
+np.random.seed(42)       # Fix seed for strict reproducibility
+
+prob_flotation_triggered = False
+ttf_prob_seconds = None
+
+# Allocate the grid array space cleanly across the 100 spatial nodes
+P_w = np.linspace(P_w_chronic, P_w_chronic * 0.4, NX)
+
+print(">> Initiating Coupled Stochastic Boundary Run...")
 
 for step in range(NT):
     current_time = step * DT
@@ -77,11 +87,11 @@ for step in range(NT):
     P_w_old = P_w.copy()
     u_old = u.copy()
     
-    # FIX: Explicit index assignments prevent full array variable overrides
+    # Explicit boundary conditions to upstream/downstream terminal nodes
     P_w[0] = RHO_WATER * G * h_pulse + P_w_chronic  # Inlet injection node 0
-    P_w[-1] = P_w_chronic * 0.4                      # Outlet venting node NX-1
+    P_w[-1] = P_w_chronic * 0.4                     # Outlet venting node NX-1
     
-    # Explicit numerical updates across internal spatial cells (Nodes 1 to 98)
+    # --- DETERMINISTIC NAVIER-STOKES SOLVER STEP ---
     for i in range(1, NX - 1):
         # 1D pressure gradient force
         pressure_gradient = (P_w_old[i+1] - P_w_old[i-1]) / (2.0 * DX)
@@ -104,27 +114,46 @@ for step in range(NT):
         # Mass conservation pressure coupling wave update
         P_w[i] = P_w_old[i] - DT * (RHO_WATER * G) * (u[i] - u[i-1]) / DX
 
-    # Compute Terzaghi Effective Pressure profile: N = P_i - P_w
-    N = P_I - P_w
+    # --- PROBABILISTIC / GEOMETRIC NOISE STEP ---
+    # Inject Stochastic Geometric Noise Vector across spatial cells
+    # Represents unobservable bed roughness and internal conduit scaling anomalies
+    geometric_noise = np.random.normal(0, SIGMA_GEOM, size=NX)
+    
+    # Compute the decoupled probabilistic pressure field
+    P_w_prob = P_w + geometric_noise
+    
+    # Compute Terzaghi Effective Pressure profiles: N = Pi - Pw
+    N_deterministic = P_I - P_w
+    N_probabilistic = P_I - P_w_prob
     
     # Monitor the minimum effective pressure along the internal sliding mass
-    min_N_body = np.min(N[1:-1])
+    min_N_det_body = np.min(N_deterministic[1:-1])
+    min_N_prob_body = np.min(N_probabilistic[1:-1])
     
     # Telemetry logging (sampled every 20 steps to save memory arrays)
     if step % 20 == 0:
         time_history.append(current_time / 60.0)
-        N_min_history.append(min_N_body / 1e6)
+        # Log the deterministic curve to maintain consistency with your Paper 3 plot setup
+        N_min_history.append(min_N_det_body / 1e6)
         u_exit_history.append(u[-2])
     
-        # Inside src/chmrs_simulation.py (around line 124)
-    # Flotation tracking criterion check (Internal sliding zone lifts off rock)
-    if min_N_body <= 0 and not flotation_triggered:
+    # Evaluate Noise-Induced Transition Threshold (Probabilistic Localised Flotation)
+    if min_N_prob_body <= 0 and not prob_flotation_triggered:
+        ttf_prob_seconds = current_time
+        prob_flotation_triggered = True
+        print(f"--> PROBABILISTIC ALARM: Localised noise-induced flotation at t = {ttf_prob_seconds/60.0:.2f} minutes.")
+        
+    # Evaluate Deterministic Mean Flotation Limit (Wholesale Flotation)
+    if min_N_det_body <= 0 and not flotation_triggered:
         ttf_seconds = current_time
         flotation_triggered = True
-        print(f"!!! CRITICAL FAILURE MODE !!! Flotation boundary crossed at t = {ttf_seconds/60.0:.2f} minutes.")
+        print(f"!!! DETERMINISTIC FAILURE: Wholesale flotation at t = {ttf_seconds/60.0:.2f} minutes.")
         
-        # ADD THIS BREAK STATEMENT TO AUTOMATICALLY EXIT AND SAVE THE GRAPH IMMEDIATELY
-        break 
+    # AUTOMATED EARLY EXIT: Once both boundaries are triggered, compute the delta and break
+    if flotation_triggered and prob_flotation_triggered:
+        delta_lead_time = (ttf_seconds - ttf_prob_seconds) / 60.0
+        print(f">> SUCCESS: Stochastic noise-induced delta identifies localized failure {delta_lead_time:.2f} minutes early.")
+        break
 
 # =====================================================================
 # 5. POST-PROCESSING DATA VISUALIZATION
