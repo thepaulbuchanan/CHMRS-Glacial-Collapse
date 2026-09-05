@@ -34,8 +34,11 @@ P_I = RHO_ICE * G * ICE_THICKNESS
 # =====================================================================
 NX = 100               # Number of spatial grid points along the bedrock line
 DX = BED_LENGTH / NX   # Spatial step size (m)
-NT = 7200              # Total simulation steps (7200s = 2.0 hours)
-DT = 1.0               # Temporal step size (s) - satisfies CFL stability
+
+# Inside src/chmrs_simulation.py
+NT = 144000            # Total simulation steps for a 2-hour window
+DT = 0.05              # Temporal step size (s) - satisfies CFL stability
+
 
 # Define coordinate arrays
 x = np.linspace(0, BED_LENGTH, NX)

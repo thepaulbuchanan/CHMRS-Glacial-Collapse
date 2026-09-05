@@ -19,7 +19,7 @@ class TestCHMRSSimulationStability(unittest.TestCase):
         self.bed_length = 1500.0    # Total channel horizontal reach (m)
         self.nx = 100               # Grid cells
         self.dx = self.bed_length / self.nx  # dx = 15.0 m
-        self.dt = 1.0               # dt = 1.0 s
+        self.dt = 0.05               # dt = 1.0 s
         
         # Physics constants
         self.rho_water = 1000.0     # kg/m^3
